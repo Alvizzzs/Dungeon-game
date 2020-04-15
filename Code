@@ -1,0 +1,106 @@
+program DungeonGame;
+uses crt;
+var HP, enemy, diceroll, enemyhp, attack: integer;
+  user, dif, enemyname: string;
+
+
+procedure combat;
+begin
+  TextColor (White);
+  randomize;
+  enemy:=random(4);
+    if enemy=1 then
+   begin
+    enemyname:='guard';
+    enemyhp:=5;
+   end;
+
+  if enemy=2 then
+   begin
+    enemyname:='draugr';
+    enemyhp:=4;
+   end;
+  if enemy=3 then
+   begin
+    enemyname:='troll';
+    enemyhp:=2;
+   end;
+  if enemy=4 then
+   begin
+    enemyname:='rat';
+    enemyhp:=1;
+   end;
+  writeln(enemy);
+  writeln('You are being attacked by a ',enemyname,' with ',enemyhp,' HP.');
+  while enemyhp>0 do
+     begin
+     diceroll:=random(2);
+     if diceroll=1 then
+     begin
+       attack:=random(3);
+       writeln('You attack, the enemy loses ',attack,' HP.');
+       enemyhp:=enemyhp-attack;
+     end
+    else
+     begin
+      attack:=random(3);
+      writeln('The ',enemyname,' attacks. You lose ',attack,' HP.');
+      HP:=HP-attack;
+      if HP<=0 then
+       begin
+       TextColor (Red);
+       writeln('You have been killed. GAME OVER.');
+       readln(user);
+       halt;
+       end;
+     end;
+     end;
+  writeln('You have slain the enemy');
+
+end;{combat}
+
+begin
+  TextColor (White);
+  HP:=0;
+  writeln('Welcome to the dungeon!');
+  repeat
+  writeln('Chose [E]asy or [H]ard difficulity');
+  readln(user);
+  if length(user)=1 then user:=upcase(user);
+  if user='E' then HP:=20;
+  if user='E' then dif:='Easy';
+  if user='H' then HP:=15;
+  if user='H' then dif:='Hard';
+  if user='soup' then HP:=999;
+  if user='soup' then dif:='Testing';
+  until (user='E') or (user='H') or (user='soup');
+  clrscr;
+  writeln;
+  writeln('You have entered the dungoen with ',dif,' difficulity.');
+  repeat
+  writeln;
+  writeln('HP =',HP);
+  write('Move - W   Quit - Q');
+  writeln;
+  readln(user);
+  if length(user)=1 then user:=upcase(user);
+  if user='W' then
+   begin
+     randomize;
+     diceroll:=random(2);
+     if diceroll=1 then
+      begin
+        clrscr;
+        combat;
+      end;
+     if diceroll=0 then
+      begin
+        clrscr;
+        writeln('Nothing happens, move further');
+      end;
+   end;
+  if user='Q' then halt;
+  until HP=0;
+  readln;
+end.
+                                                       
