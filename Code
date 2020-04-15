@@ -3,18 +3,18 @@ uses crt;
 var HP, enemy, diceroll, enemyhp, attack: integer;
   user, dif, enemyname: string;
 
-
+//Procedura cinai
 procedure combat;
 begin
   TextColor (White);
   randomize;
+  //Nosaka ienaidnieku
   enemy:=random(4);
     if enemy=1 then
    begin
     enemyname:='guard';
     enemyhp:=5;
    end;
-
   if enemy=2 then
    begin
     enemyname:='draugr';
@@ -30,7 +30,7 @@ begin
     enemyname:='rat';
     enemyhp:=1;
    end;
-  writeln(enemy);
+ //Cinas sakums
   writeln('You are being attacked by a ',enemyname,' with ',enemyhp,' HP.');
   while enemyhp>0 do
      begin
@@ -59,6 +59,7 @@ begin
 
 end;{combat}
 
+//Pasa koda sakums
 begin
   TextColor (White);
   HP:=0;
@@ -86,6 +87,7 @@ begin
   if length(user)=1 then user:=upcase(user);
   if user='W' then
    begin
+   //Pec kaulina sveisanas nosaka kada bus nakama darbiba
      randomize;
      diceroll:=random(2);
      if diceroll=1 then
