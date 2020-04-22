@@ -106,3 +106,5 @@ begin
   readln;
 end.
                                                        
+//Izveidot mapi, pa kuru būs iespējams pārvietoties un redzēt
+//Izveidot sistēmu veikalam (bruņas,dažādi ieroči, iespējams uzpildīt vai pat palielināt HP lielumu.)
