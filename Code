@@ -1,15 +1,128 @@
 program DungeonGame;
 uses crt;
-var HP, enemy, diceroll, enemyhp, attack: integer;
+var HP, enemy, diceroll, enemyhp, attack, armor, knife, gold, addgold: integer;
   user, dif, enemyname: string;
 
-//Procedura cinai
+
+procedure border;
+//Genere malas
+begin
+TextColor (LightBlue);
+writeln('---------------------------------------------------------------------');
+TextColor (White);
+end;
+
+procedure inventory;
+//Speletaja soma
+begin
+if (armor=0) and (knife=0)then
+ begin
+ border;
+ writeln('Your inventory is empty.');
+ writeln('Exit inventory - X');
+ border;
+ end;
+begin
+ border;
+ writeln('INVENTORY');
+ writeln;
+ if armor=1 then writeln('Armor');
+ if knife=1 then writeln('Knife');
+ writeln;
+ border;
+end;
+readln;
+clrscr;
+end;
+procedure merchant;
+begin
+ //Veikals
+ border;
+ TextColor (Green);
+ writeln('Welcome to the shop! Feel free to browse.');
+ writeln;
+ TextColor (White);
+ repeat
+ if knife=0 then writeln('[K]nife - Improves damage by +1   4 Gold' );
+ if armor=0 then writeln('[A]rmor - Take less damage        5 Gold');
+ writeln('[P]otion - restores HP            2 Gold');
+ writeln;
+ writeln('You have ',gold,' gold pieces');
+ writeln('Write the item you want.');
+ writeln('Exit Shop - X');
+ border;
+ readln(user);
+ if (user='K') or (user='k') then
+  begin
+    if gold < 4 then
+     begin
+     clrscr;
+     writeln('Sorry, you dont gave enough gold');
+     readln;
+     clrscr;
+     end;
+    if gold >= 4 then
+    begin
+    knife:=1;
+    gold:=gold-4;
+    clrscr;
+    writeln('You now have a knife.');
+    readln;
+    clrscr;
+    end;
+  end;
+
+    if (user='A') or (user='a') then
+  begin
+    if gold < 5 then
+     begin
+     clrscr;
+     writeln('Sorry, you dont gave enough gold');
+     readln;
+     clrscr;
+     end;
+    if gold >= 5 then
+    begin
+    Armor:=1;
+    gold:=gold-5;
+    writeln('You now have armor.');
+    readln;
+    clrscr;
+    end;
+  end;
+
+    if (user='P') or (user='p') then
+  begin
+    if gold < 2 then
+     begin
+     clrscr;
+     writeln('Sorry, you dont gave enough gold');
+     readln;
+     clrscr;
+     end;
+    if gold >= 2 then
+    begin
+    if dif='Easy' then hp:=20;
+    if dif='Hard' then hp:=15;
+     begin
+     clrscr;
+     writeln('Your HP has been restored');
+     gold:=gold-2;
+     readln;
+     clrscr;
+     end;
+    end;
+  end;
+ clrscr;
+ until (user='X') or (user='x');
+end;
+//Ciinas kods
 procedure combat;
 begin
   TextColor (White);
   randomize;
   //Nosaka ienaidnieku
-  enemy:=random(4);
+  enemy:=random(5);
     if enemy=1 then
    begin
     enemyname:='guard';
@@ -31,19 +144,22 @@ begin
     enemyhp:=1;
    end;
  //Cinas sakums
+  border;
   writeln('You are being attacked by a ',enemyname,' with ',enemyhp,' HP.');
   while enemyhp>0 do
      begin
      diceroll:=random(2);
      if diceroll=1 then
      begin
-       attack:=random(3);
+       if knife=1 then attack:=random(3)+1
+       else attack:=random(3);
        writeln('You attack, the enemy loses ',attack,' HP.');
        enemyhp:=enemyhp-attack;
      end
     else
      begin
-      attack:=random(3);
+      if armor=1 then attack:=random(2)
+      else attack:=random(4);
       writeln('The ',enemyname,' attacks. You lose ',attack,' HP.');
       HP:=HP-attack;
       if HP<=0 then
@@ -56,6 +172,9 @@ begin
      end;
      end;
   writeln('You have slain the enemy');
+  addgold:=random(4)+1;
+  gold:=gold+addgold;
+  writeln('You got ',addgold,' gold.');
 
 end;{combat}
 
@@ -63,9 +182,12 @@ end;{combat}
 begin
   TextColor (White);
   HP:=0;
+  gold:=0;
+  border;
   writeln('Welcome to the dungeon!');
   repeat
   writeln('Chose [E]asy or [H]ard difficulity');
+  border;
   readln(user);
   if length(user)=1 then user:=upcase(user);
   if user='E' then HP:=20;
@@ -77,11 +199,13 @@ begin
   until (user='E') or (user='H') or (user='soup');
   clrscr;
   writeln;
+  border;
   writeln('You have entered the dungoen with ',dif,' difficulity.');
   repeat
   writeln;
-  writeln('HP =',HP);
-  write('Move - W   Quit - Q');
+  writeln('HP =',HP,' Gold=',gold);
+  writeln('Quit - Q   Move - W                         Shop - S   Inventory - I');
+  border;
   writeln;
   readln(user);
   if length(user)=1 then user:=upcase(user);
@@ -98,13 +222,21 @@ begin
      if diceroll=0 then
       begin
         clrscr;
+        border;
         writeln('Nothing happens, move further');
       end;
    end;
   if user='Q' then halt;
+  if user='S' then
+   begin
+     clrscr;
+     merchant;
+   end;
+  if user='I' then
+   begin
+     clrscr;
+     inventory;
+   end;
   until HP=0;
   readln;
 end.
-                                                       
-//Izveidot mapi, pa kuru būs iespējams pārvietoties un redzēt
-//Izveidot sistēmu veikalam (bruņas,dažādi ieroči, iespējams uzpildīt vai pat palielināt HP lielumu.)
