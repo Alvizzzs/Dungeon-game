@@ -1,48 +1,69 @@
 program DungeonGame;
-uses crt;
+uses crt,sysutils;
 var HP, enemy, diceroll, enemyhp, attack, armor, knife, gold, addgold: integer;
   user, dif, enemyname: string;
+  savegame : textfile;
+
 
 
 procedure border;
-//Genere malas
 begin
 TextColor (LightBlue);
 writeln('---------------------------------------------------------------------');
 TextColor (White);
 end;
-
-procedure inventory;
-//Speletaja soma
+procedure save;
 begin
-if (armor=0) and (knife=0)then
+  clrscr;
+  assignfile(savegame, 'Game.txt');
+  rewrite(savegame);
+  writeln(savegame,dif);
+  writeln(savegame,HP);
+  writeln(savegame,Gold);
+  writeln(savegame,armor);
+  writeln(savegame,knife);
+  close(savegame);
+  border;
+  writeln('Your game has been saved !');
+  end;
+procedure inventory;
+begin
+border;
+writeln('INVENTORY');
+writeln;
+if (armor=0) and (knife=0) then
  begin
- border;
  writeln('Your inventory is empty.');
  writeln('Exit inventory - X');
- border;
  end;
-begin
- border;
- writeln('INVENTORY');
+if (armor=1) and (knife=0)then
+  begin
+   writeln('Armor');
+  end;
+if (armor=0) and (knife=1)then
+  begin
+   writeln('Knife');
+  end;
+ if (armor=1) and (knife=1)then
+  begin
+   writeln('Armor');
+   writeln('Knife');
+  end;
  writeln;
- if armor=1 then writeln('Armor');
- if knife=1 then writeln('Knife');
- writeln;
  border;
-end;
 readln;
 clrscr;
 end;
 procedure merchant;
 begin
- //Veikals
+ //Veikala kods
  border;
  TextColor (Green);
  writeln('Welcome to the shop! Feel free to browse.');
  writeln;
  TextColor (White);
  repeat
+ border;
  if knife=0 then writeln('[K]nife - Improves damage by +1   4 Gold' );
  if armor=0 then writeln('[A]rmor - Take less damage        5 Gold');
  writeln('[P]otion - restores HP            2 Gold');
@@ -83,6 +104,7 @@ begin
      end;
     if gold >= 5 then
     begin
+    clrscr;
     Armor:=1;
     gold:=gold-5;
     writeln('You now have armor.');
@@ -166,6 +188,7 @@ begin
        begin
        TextColor (Red);
        writeln('You have been killed. GAME OVER.');
+       border;
        readln(user);
        halt;
        end;
@@ -186,7 +209,7 @@ begin
   border;
   writeln('Welcome to the dungeon!');
   repeat
-  writeln('Chose [E]asy or [H]ard difficulity');
+  writeln('Chose [E]asy or [H]ard difficulity, or [L]oad a game');
   border;
   readln(user);
   if length(user)=1 then user:=upcase(user);
@@ -194,17 +217,18 @@ begin
   if user='E' then dif:='Easy';
   if user='H' then HP:=15;
   if user='H' then dif:='Hard';
-  if user='soup' then HP:=999;
-  if user='soup' then dif:='Testing';
+
   until (user='E') or (user='H') or (user='soup');
   clrscr;
   writeln;
   border;
   writeln('You have entered the dungoen with ',dif,' difficulity.');
   repeat
+  border;
   writeln;
   writeln('HP =',HP,' Gold=',gold);
   writeln('Quit - Q   Move - W                         Shop - S   Inventory - I');
+  writeln('Save Game - Z');
   border;
   writeln;
   readln(user);
@@ -227,6 +251,7 @@ begin
       end;
    end;
   if user='Q' then halt;
+  if user='Z' then save;
   if user='S' then
    begin
      clrscr;
@@ -239,4 +264,4 @@ begin
    end;
   until HP=0;
   readln;
-end.
+end.                                        
