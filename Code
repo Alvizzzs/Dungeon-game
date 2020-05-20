@@ -209,7 +209,7 @@ begin
   border;
   writeln('Welcome to the dungeon!');
   repeat
-  writeln('Chose [E]asy or [H]ard difficulity, or [L]oad a game');
+  writeln('Choose [E]asy or [H]ard difficulity');
   border;
   readln(user);
   if length(user)=1 then user:=upcase(user);
@@ -218,15 +218,14 @@ begin
   if user='H' then HP:=15;
   if user='H' then dif:='Hard';
 
-  until (user='E') or (user='H') or (user='soup');
+  until (user='E') or (user='H');
   clrscr;
   writeln;
-  border;
-  writeln('You have entered the dungoen with ',dif,' difficulity.');
   repeat
+  clrscr;
   border;
   writeln;
-  writeln('HP =',HP,' Gold=',gold);
+  writeln('HP =',HP,' Gold =',gold,'  Difficulty = ',dif);
   writeln('Quit - Q   Move - W                         Shop - S   Inventory - I');
   writeln('Save Game - Z');
   border;
@@ -264,4 +263,4 @@ begin
    end;
   until HP=0;
   readln;
-end.                                        
+end.                            
